@@ -1,0 +1,6 @@
+var x= 14 ;
+var y=21.7;
+14.1414;
+"rares";
+var z = x+y ;
+afiseaza z;
