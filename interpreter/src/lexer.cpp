@@ -1,3 +1,13 @@
+/**
+ * @file lexer.cpp
+ * @brief Lexer implementation for the Roscript interpreter.
+ * This file contains the implementation of the lexer for the Roscript interpreter. It contains functions to tokenize the input source code, identifing keywords, operators, literals, and handling string literals with escape sequences.
+ * It's header contains the lexer function and the Type class for type checking.
+ * @see lexer.h
+ * 
+ * @author Rares-Cosma & Vlad-Oprea
+ * @date 2025-06-10
+ */
 #include "lexer.h"
 #include "commons.cpp"
 #include <fstream>
@@ -7,11 +17,21 @@
 using namespace std;
 
 bool isnotsep(char letter) {
+    /**
+     * @brief Checks if a character is not a separator.
+     * @param letter The character to check.
+     * @return true if the character is not a separator, false otherwise.
+     */
     string sep = " =;+-*/(){}[],<>!%\n\r";
     return sep.find(letter) == string::npos;
 }
 
 bool iskeyword(const string& word) {
+    /**
+     * @brief Checks if a word is a keyword in the Roscript language.
+     * @param word The word to check.
+     * @return true if the word is a keyword, false otherwise.
+     */
     vector<string> keywords = {"var", "afiseaza","citeste","daca","atunci","altfel","executa","cat","timp","pentru","pana","cand","fiecare"};
     for (const string& kw : keywords) {
         if (word == kw) return true;
@@ -26,6 +46,14 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
 
     vector<int> tpl; // to store the number of tokens per line
 
+    /**
+     * @brief Lexical analyzer function that reads a source file and tokenizes its content.
+     * @param fn The file name to read.
+     * @param tokens A vector to store the tokens found in the file.
+     * @param tpl A vector to store the number of tokens per line.
+     * @return A pair containing the vector of tokens and the vector of token counts per line
+     */
+
     int ct=0;
 
     if (!file) {
@@ -35,7 +63,7 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
 
     char current_char;
     string keyword;
-    while (file.get(current_char)) {
+    while (file.get(current_char)) { // read character by character until EOF
         if (current_char == '\r') {
             continue;
         }
@@ -45,7 +73,7 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
             continue;
         }
 
-        if (current_char == '"') {
+        if (current_char == '"') { // handle string literal
             string str_literal = "";
             while (file.get(current_char) && current_char != '"') {
                 if (current_char == '\\') {
