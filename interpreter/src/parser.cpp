@@ -10,7 +10,7 @@
  * This is the description of the parse_rhs_expression function, which is the core of the parser. It handles operator precedence and associativity, and recursively parses right-hand side expressions.
  * @image html prhse.png
  *
- * @author Rares-Cosma
+ * @author Rares-Cosma & Vlad-Oprea
  * @date 2025-04-25
  */
 #include "parser.h"
