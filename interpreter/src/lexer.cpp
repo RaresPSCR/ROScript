@@ -41,7 +41,7 @@ bool iskeyword(const string& word) {
 
 pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
     vector<pair<string, string>> tokens;
-    ifstream file(fn);
+    ifstream file(fn); // opens the file with the source code
     Type checker;
 
     vector<int> tpl; // to store the number of tokens per line
@@ -54,7 +54,7 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
      * @return A pair containing the vector of tokens and the vector of token counts per line
      */
 
-    int ct=0;
+    int ct=0; // counter representing the number of tokens on a line
 
     if (!file) {
         cout << "File not found" << endl;
@@ -67,15 +67,16 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
         if (current_char == '\r') {
             continue;
         }
-        if (current_char == '\n'){
+        if (current_char == '\n'){ // send the ct to the vector and reset it
             tpl.push_back(ct);
             ct=0;
             continue;
         }
 
-        if (current_char == '"') { // handle string literal
+        if (current_char == '"') { // string literals
             string str_literal = "";
-            while (file.get(current_char) && current_char != '"') {
+            while (file.get(current_char) && current_char != '"') { 
+            // the next character has been read successfully and it is not '"'
                 if (current_char == '\\') {
                     // handle escape sequence
                     if (file.get(current_char)) {
@@ -88,25 +89,26 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
                         }
                     }
                 } else {
-                    str_literal += current_char;
+                    str_literal += current_char; // adds the current character to the string
                 }
             }
-            tokens.push_back({"STRING", str_literal});
+            tokens.push_back({"STRING", str_literal}); // inserts the new pair in the vector with tokens
             ct++;
             continue;
         }
 
         if (isnotsep(current_char)) {
-            keyword += current_char;
+            keyword += current_char; // add the current character to keyword until a separator is meet
         } else {
-            if (!keyword.empty()) {
-                if (iskeyword(keyword)) {tokens.push_back({"KEYWORD", keyword});ct++;}
-		        else if (checker.is_float_numeral(keyword)) {tokens.push_back({"FLOAT", keyword});ct++;}
-                else if (checker.is_integer_numeral(keyword)) {tokens.push_back({"INT", keyword});ct++;}
-		        else {tokens.push_back({"ID", keyword});ct++;}
-                keyword = "";
+            if (!keyword.empty()) { // if characters were added to keyword
+                if (iskeyword(keyword)) {tokens.push_back({"KEYWORD", keyword});ct++;} // KEYWORD
+		        else if (checker.is_float_numeral(keyword)) {tokens.push_back({"FLOAT", keyword});ct++;} // FLOAT
+                else if (checker.is_integer_numeral(keyword)) {tokens.push_back({"INT", keyword});ct++;} // INT
+		        else {tokens.push_back({"ID", keyword});ct++;} // ID
+                keyword = ""; // reset the keyword
             }
 
+            // operators
             if (current_char == '=' || current_char == '!' || current_char == '<' || current_char == '>' || current_char == '+' || current_char == '-' || current_char == '*' || current_char == '/') {
                 if (file.peek() == '=') {
                     char next_char;
@@ -132,6 +134,7 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
                 }
             }
             
+            // separators
             else if (current_char == ';') {tokens.push_back({"NLINE", ";"});ct++;}
             else if (current_char == '[') {tokens.push_back({"OP", "%"});ct++;}
             else if (current_char == '[') {tokens.push_back({"LBRACKET", "["});ct++;}
@@ -145,5 +148,5 @@ pair<vector<pair<string, string>>,vector<int>> lexer(string fn) {
     }
 
     tpl.push_back(ct); // add the last line token count
-    return {tokens, tpl};
+    return {tokens, tpl}; // returns the pair
 }
