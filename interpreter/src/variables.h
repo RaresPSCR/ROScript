@@ -13,4 +13,4 @@
 using namespace std;
 using Value = variant<int, float, string, bool>;
 
-extern std::unordered_map<std::string, Value> variables;
+extern unordered_map<string, Value> variables; // Global map to store variables and their values, used by the interpreter

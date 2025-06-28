@@ -15,10 +15,11 @@
 inline vector<string> arithmetic_operators = {"+", "-", "*", "/", "%"};
 inline vector<string> comparison_operators = {"==", "!=", "<", ">", "<=", ">="};
 
-inline string variant_to_string(const Value& v) {
+inline string variant_to_string(const Value& v) { // used to convert Value to string for printing
 	/**
-	 * @brief Converts a Value variant to a string representation.
+	 * @brief Converts any type of value to a string representation.
 	 * @param v The Value variant to convert.
+	 * @note This function is used by the interpreter to print values of different types.
 	 * @return A string representation of the Value.
 	 */
     if (holds_alternative<int>(v)) return to_string(get<int>(v));
@@ -31,7 +32,7 @@ inline string variant_to_string(const Value& v) {
 /**
  * @class ASTNode
  * @brief Abstract base class for all AST nodes.
- * @note This class defines the interface for all AST nodes, including a virtual destructor and a pure virtual function for evaluation.
+ * @note 
  */
 class ASTNode {
 	public:
