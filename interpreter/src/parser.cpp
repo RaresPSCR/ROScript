@@ -31,8 +31,8 @@ struct Token {
 
 class TokenStream {
 public:
-    std::vector<std::pair<std::string, std::string>> raw_tokens; // {type, value} 
-    std::vector<Token> tokens;                                   // final token list
+    vector<pair<string, string>> raw_tokens; // {type, value} 
+    vector<Token> tokens; // final token list
 
     void init(vector<int> tokens_per_line) {
         /**
@@ -43,8 +43,8 @@ public:
         int line_number = 1;
 
         for (int count : tokens_per_line) {
-            std::vector<std::string> current_line_texts;
-            std::string full_line;
+            vector<string> current_line_texts;
+            string full_line;
 
             for (int i = 0; i < count; ++i) {
                 if (token_index >= raw_tokens.size()) break;
@@ -661,6 +661,8 @@ void parse_if_statement(const vector<Token>& tokens, int& idx, vector<ASTNode*>&
 	}
 }
 
+// Start of the parser function
+
 vector<ASTNode*> parse(vector<pair<string, string>> tokens, vector<int> tokens_per_line) {
 	/**
  	* @brief Parses the tokens and creates the AST.
@@ -670,7 +672,7 @@ vector<ASTNode*> parse(vector<pair<string, string>> tokens, vector<int> tokens_p
 	 */
 
 	TokenStream stream;
-	stream.raw_tokens = tokens;
+	stream.raw_tokens = tokens; //the only place where we use the raw tokens
 	stream.init(tokens_per_line);
 
 	int idx = 0; // token counter
